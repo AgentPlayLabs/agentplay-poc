@@ -43,6 +43,14 @@ pnpm build
 1. Start the server (with a single character):
 ```bash
 pnpm start --characters="characters/cn_lao.character.json"
+
+or
+
+pnpm start --characters="characters/cn_trump.character.json,characters/cn_mabaoguo.character.json"
+```
+
+
+
 ```
 
 2. Launch the web interface:
