@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import {
     ChatBubble,
@@ -36,6 +37,12 @@ type AnimatedDivProps = AnimatedProps<{ style: React.CSSProperties }> & {
     children?: React.ReactNode;
 };
 
+const getAvatarSrc = (name?: string) => {
+    if (!name) return "/avatars/default.png";
+
+    return `/avatars/${name}.jpeg`;
+};
+
 export default function Page({ agentId }: { agentId: UUID }) {
     const { toast } = useToast();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -43,6 +50,14 @@ export default function Page({ agentId }: { agentId: UUID }) {
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
+
+    const query = useQuery({
+        queryKey: ["agent", agentId],
+        queryFn: () => apiClient.getAgent(agentId),
+        refetchInterval: 5_000,
+    });
+    const agentData = query?.data;
+    console.log(agentData)
 
     const queryClient = useQueryClient();
 
@@ -52,7 +67,7 @@ export default function Page({ agentId }: { agentId: UUID }) {
     const { scrollRef, isAtBottom, scrollToBottom, disableAutoScroll } = useAutoScroll({
         smooth: true,
     });
-   
+
     useEffect(() => {
         scrollToBottom();
     }, [queryClient.getQueryData(["messages", agentId])]);
@@ -159,6 +174,7 @@ export default function Page({ agentId }: { agentId: UUID }) {
     const messages =
         queryClient.getQueryData<ContentWithUser[]>(["messages", agentId]) ||
         [];
+    const agentAvatarSrc = getAvatarSrc(agentData?.character.name);
 
     const transitions = useTransition(messages, {
         keys: (message) =>
@@ -173,7 +189,7 @@ export default function Page({ agentId }: { agentId: UUID }) {
     return (
         <div className="flex flex-col w-full h-[calc(100dvh)] p-4">
             <div className="flex-1 overflow-y-auto">
-                <ChatMessageList 
+                <ChatMessageList
                     scrollRef={scrollRef}
                     isAtBottom={isAtBottom}
                     scrollToBottom={scrollToBottom}
@@ -196,8 +212,14 @@ export default function Page({ agentId }: { agentId: UUID }) {
                                     className="flex flex-row items-center gap-2"
                                 >
                                     {message?.user !== "user" ? (
-                                        <Avatar className="size-8 p-1 border rounded-full select-none">
-                                            <AvatarImage src="/elizaos-icon.png" />
+                                        <Avatar className="size-8 p-1">
+                                            <AvatarImage
+                                                src={agentAvatarSrc}
+                                                onError={(e) => {
+                                                    e.currentTarget.src =
+                                                        "/avatars/default.jpeg";
+                                                }}
+                                            />
                                         </Avatar>
                                     ) : null}
                                     <div className="flex flex-col">
