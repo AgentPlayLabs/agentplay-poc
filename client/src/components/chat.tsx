@@ -57,7 +57,6 @@ export default function Page({ agentId }: { agentId: UUID }) {
         refetchInterval: 5_000,
     });
     const agentData = query?.data;
-    console.log(agentData)
 
     const queryClient = useQueryClient();
 
