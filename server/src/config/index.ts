@@ -99,5 +99,7 @@ export function getTokenForProvider(
       );
     case ModelProviderName.GROQ:
       return character.settings?.secrets?.GROQ_API_KEY || settings.GROQ_API_KEY;
-  }
+    case ModelProviderName.ALI_BAILIAN:
+      return  character.settings?.secrets?.ALI_BAILIAN_API_KEY ||settings.ALI_BAILIAN_API_KEY;
+  }   
 }

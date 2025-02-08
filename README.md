@@ -45,11 +45,12 @@ pnpm build
 pnpm start --characters="characters/cn_lao.character.json"
 
 or
-
 pnpm start --characters="characters/cn_trump.character.json,characters/cn_mabaoguo.character.json"
+
+or
+pnpm start:server --characters="characters/cn_lao.character.json"
+
 ```
-
-
 
 ```
 
