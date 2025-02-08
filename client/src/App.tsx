@@ -6,6 +6,7 @@ import { TooltipProvider } from "./components/ui/tooltip";
 import { Toaster } from "./components/ui/toaster";
 import { BrowserRouter, Route, Routes } from "react-router";
 import Chat from "./routes/chat";
+import Discuss from "./routes/discuss";
 import Overview from "./routes/overview";
 import Home from "./routes/home";
 import useVersion from "./hooks/use-version";
@@ -40,6 +41,8 @@ function App() {
                                             path="chat/:agentId"
                                             element={<Chat />}
                                         />
+                                        <Route path="discuss/:agentId1" element={<Discuss />} />
+                                        <Route path="discuss/:agentId1/:agentId2" element={<Discuss />} />
                                         <Route
                                             path="settings/:agentId"
                                             element={<Overview />}

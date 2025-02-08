@@ -53,6 +53,17 @@ export default function Home() {
                                     </Button>
                                 </NavLink>
                                 <NavLink
+                                    to={`/discuss/${agent.id}`}
+                                    className="w-full grow"
+                                >
+                                    <Button
+                                        variant="outline"
+                                        className="w-full grow"
+                                    >
+                                        Discuss
+                                    </Button>
+                                </NavLink>
+                                <NavLink
                                     to={`/settings/${agent.id}`}
                                     key={agent.id}
                                 >
