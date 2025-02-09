@@ -1,4 +1,3 @@
-import { DirectClient } from "@elizaos/client-direct";
 import {
   AgentRuntime,
   elizaLogger,
@@ -21,6 +20,9 @@ import {
   parseArguments,
 } from "./config/index.ts";
 import { initializeDatabase } from "./database/index.ts";
+
+import { DirectClientMulti } from "./client-direct-multi/index.ts";
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -62,7 +64,7 @@ export function createAgent(
   });
 }
 
-async function startAgent(character: Character, directClient: DirectClient) {
+async function startAgent(character: Character, directClient: DirectClientMulti) {
   try {
     character.id ??= stringToUuid(character.name);
     character.username ??= character.name;
@@ -121,7 +123,8 @@ const checkPortAvailable = (port: number): Promise<boolean> => {
 };
 
 const startAgents = async () => {
-  const directClient = new DirectClient();
+  const directClient = new DirectClientMulti();
+
   let serverPort = parseInt(settings.SERVER_PORT || "3000");
   const args = parseArguments();
 
@@ -135,11 +138,13 @@ const startAgents = async () => {
   console.log("characters", characters);
   try {
     for (const character of characters) {
-      await startAgent(character, directClient as DirectClient);
+      await startAgent(character, directClient as DirectClientMulti);
     }
   } catch (error) {
     elizaLogger.error("Error starting agents:", error);
   }
+
+  
 
   while (!(await checkPortAvailable(serverPort))) {
     elizaLogger.warn(`Port ${serverPort} is in use, trying ${serverPort + 1}`);
@@ -154,16 +159,19 @@ const startAgents = async () => {
 
   directClient.start(serverPort);
 
-  if (serverPort !== parseInt(settings.SERVER_PORT || "3000")) {
-    elizaLogger.log(`Server started on alternate port ${serverPort}`);
-  }
 
-  const isDaemonProcess = process.env.DAEMON_PROCESS === "true";
-  if(!isDaemonProcess) {
-    elizaLogger.log("Chat started. Type 'exit' to quit.");
-    const chat = startChat(characters);
-    chat();
-  }
+  elizaLogger.log(`Server started on port ${serverPort}`);
+
+  // if (serverPort !== parseInt(settings.SERVER_PORT || "3000")) {
+  //   elizaLogger.log(`Server started on alternate port ${serverPort}`);
+  // }
+
+  // const isDaemonProcess = process.env.DAEMON_PROCESS === "true";
+  // if(!isDaemonProcess) {
+  //   elizaLogger.log("Chat started. Type 'exit' to quit.");
+  //   const chat = startChat(characters);
+  //   chat();
+  // }
 };
 
 startAgents().catch((error) => {

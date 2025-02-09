@@ -42,13 +42,10 @@ pnpm build
 
 1. Start the server (with a single character):
 ```bash
-pnpm start --characters="characters/cn_lao.character.json"
 
-or
-pnpm start --characters="characters/cn_trump.character.json,characters/cn_mabaoguo.character.json"
+pnpm start:server --characters="cn_lao.character.json,cn_mabaoguo.character.json,cn_trump.character.json"
 
-or
-pnpm start:server --characters="characters/cn_lao.character.json"
+pnpm start:server:debug --characters="cn_lao.character.json,cn_mabaoguo.character.json,cn_trump.character.json"
 
 ```
 
