@@ -1,6 +1,6 @@
 {
 	"version": "0.1.9",
-	"packages": ["packages/*", "docs", "agent", "client", "server","!packages/_examples"],
+	"packages": ["packages/*", "docs", "agent", "client", "agentplay","!packages/_examples"],
 	"npmClient": "pnpm",
 	"command": {
 		"publish": {
